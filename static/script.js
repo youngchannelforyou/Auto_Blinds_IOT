@@ -30,8 +30,8 @@ autoBtn.addEventListener("click", function () {
         upBtn.disabled = false;
         downBtn.disabled = false;
     }
-
-    sendData(data);
+    sendData("/stoprun");
+    sendData("/auto");
 });
 
 upBtn.addEventListener("click", function () {
@@ -65,7 +65,7 @@ modeBtn.addEventListener("click", function () {
 
         modeBtn.innerHTML = modeBtnisOn ? '주간 모드' : '야간 모드';
 
-        sendData(data);
+        sendData('/autotype');
     }
 });
 
