@@ -17,16 +17,23 @@ autoBtn.addEventListener("click", function () {
 
     autoBtn.innerHTML = autoBtnisOn ? '자동' : '수동';
 
+    // 자동 모드이면
     if (autoBtnisOn) {
         upBtn.innerHTML = '올리기';
+        upBtn.style.backgroundColor = "gray";
         upBtnisOn = false;
         downBtn.innerHTML = '내리기';
+        downBtn.style.backgroundColor = "gray";
         downBtnisOn = false;
         upBtn.disabled = true;
         downBtn.disabled = true;
         modeBtn.disabled = false;
-    } else {
+        modeBtn.style.backgroundColor = "#4CAF50";
+    } else { // 수동 모드일때 
+        upBtn.style.backgroundColor = "#4CAF50";
+        downBtn.style.backgroundColor = "#4CAF50";
         modeBtn.disabled = true;
+        modeBtn.style.backgroundColor = "gray";
         upBtn.disabled = false;
         downBtn.disabled = false;
     }
@@ -40,8 +47,12 @@ upBtn.addEventListener("click", function () {
     upBtn.innerHTML = upBtnisOn ? '올라가는 중' : '올리기';
 
     if (upBtnisOn == true) {
+        downBtn.disabled = true
+        downBtn.style.backgroundColor = "gray";
         sendData("/uprun")
     } else {
+        downBtn.disabled = false
+        downBtn.style.backgroundColor = "#4CAF50";
         sendData("/stoprun");
     }
 });
@@ -50,11 +61,15 @@ downBtn.addEventListener("click", function () {
 
     downBtnisOn = !downBtnisOn;
 
-    downBtn.innerHTML = downBtnisOn ? '올라가는 중' : '올리기';
+    downBtn.innerHTML = downBtnisOn ? '내려가는 중' : '내리기';
 
     if (downBtnisOn == true) {
+        upBtn.disabled = true
+        upBtn.style.backgroundColor = "gray";
         sendData("/downrun")
     } else {
+        upBtn.disabled = false
+        upBtn.style.backgroundColor = "#4CAF50";
         sendData("/stoprun");
     }
 });
