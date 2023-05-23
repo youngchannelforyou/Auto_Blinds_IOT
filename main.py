@@ -3,7 +3,7 @@ import requests
 import serial
 
 app = Flask(__name__)
-ser = serial.Serial("/dev/cu.usbmodem11401", 9600)  # 포트 및 전송 속도를 실제 환경에 맞게 변경
+ser = serial.Serial("/dev/cu.usbmodem11301", 9600)  # 포트 및 전송 속도를 실제 환경에 맞게 변경
 
 # 모터 제어에 사용할 명령어
 MOTOR_FORWARD = "F"
@@ -11,13 +11,15 @@ MOTOR_BACKWARD = "B"
 MOTOR_STOP = "S"
 AUTO_MODE = "A"
 AUTO_TYPE = "T"
-#상태 변수
+# 상태 변수
 AUTO = True
 LIGHTLEVEL = 0
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/auto", methods=["POST"])
 def auto():
@@ -27,11 +29,13 @@ def auto():
     print("log.change auto")
     return "change auto"
 
+
 @app.route("/autotype", methods=["POST"])
 def autotype():
     send_data(AUTO_TYPE)
     print("log.change auto type")
     return "change auto type"
+
 
 @app.route("/uprun", methods=["POST"])
 def uprun():
@@ -53,6 +57,7 @@ def stoprun():
     print("log.stop motor")
     return "Motor stopped"
 
+
 def send_data(data):
     ser.write(data.encode())  # 아두이노로 데이터 전송
 
@@ -70,4 +75,4 @@ while True:
         if data.startswith("L:"):
             lightLevel = data[2:]  # 접두사를 제외한 조도 데이터 추출
 
-        print (distance, lightLevel)
+        print(distance, lightLevel)
