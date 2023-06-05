@@ -1,9 +1,11 @@
+import datetime
 from flask import Flask, request, render_template
 import requests
 import serial
+from Model import Model
 
 app = Flask(__name__)
-ser = serial.Serial("/dev/cu.usbmodem11301", 9600)  # 포트 및 전송 속도를 실제 환경에 맞게 변경
+ser = serial.Serial("/dev/cu.usbmodem1101", 9600)  # 포트 및 전송 속도를 실제 환경에 맞게 변경
 
 # 모터 제어에 사용할 명령어
 MOTOR_FORWARD = "F"
@@ -63,16 +65,26 @@ def send_data(data):
 
 
 if __name__ == "__main__":
+    model = Model()
+
     app.run(host="0.0.0.0", port=8080)
 
-while True:
-    if ser.in_waiting > 0:
-        data = ser.readline().decode().strip()
-        distance = None
-        lightLevel = None
-        if data.startswith("D:"):
-            distance = data[2:]  # 접두사를 제외한 거리 데이터 추출
-        if data.startswith("L:"):
-            lightLevel = data[2:]  # 접두사를 제외한 조도 데이터 추출
+    while True:
+        if ser.in_waiting > 0:
+            data = ser.readline().decode().strip()
+            temp = None
+            light = None
+            if data.startswith("L:"):
+                light = data[2:]  # 접두사를 제외한 거리 데이터 추출
+            if data.startswith("T:"):
+                temp = data[2:]  # 접두사를 제외한 조도 데이터 추출
 
-        print(distance, lightLevel)
+        current_date = datetime.date.today()
+
+        if current_date.day == 1:
+            model.train_model()
+
+        if AUTO == True:
+            current_time = datetime.datetime.now().time()
+            if current_time.minute % 10 == 0:
+                model.predict()

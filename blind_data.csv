@@ -1,0 +1,3 @@
+time,illumination,weather,temperature,blind_status
+12,12,rain,12,1
+1,1,sun,1,0

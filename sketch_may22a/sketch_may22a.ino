@@ -15,7 +15,6 @@ int LIGHT = 0;
 void setup() {
   Serial.begin(9600);
   myStepper.setSpeed(600);
-  // UPclockwiseRotation();
   LIGHT = analogRead(lightSensorPin);
 
   pinMode(TRIG, OUTPUT);
@@ -73,9 +72,9 @@ void loop() {
   }
 }
 
-// 시계 반대 방향으로 모터 회전
 void UPclockwiseRotation() {
   long duration, distance;
+  int count = 0;
     // 시계 반대 방향으로 한바퀴 회전
   while(true) {  // 64 * 32 = 2048 한바퀴
     Serial.print("Distance: ");
@@ -87,13 +86,23 @@ void UPclockwiseRotation() {
     digitalWrite(TRIG, HIGH);
     delayMicroseconds(10);
     digitalWrite(TRIG, LOW);
+    
     duration = pulseIn (ECHO, HIGH); 
     distance = duration * 17 / 1000; 
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
+
     if (distance > 20){
-      stopMotor();  // 모터 정지
-      currentPosition = 0;
-      state = false;
-      return;      // 루프 종료
+      count = count + 1;
+      if(count >= 3){
+        stopMotor();  // 모터 정지
+        currentPosition = 0;
+        state = false;
+        return;      // 루프 종료
+      }
+    }else{
+      count = 0;
     }
 
 
@@ -116,13 +125,13 @@ void UPclockwiseRotation() {
 void DowncounterClockwiseRotation() {
   long duration, distance;
     // 시계 방향으로 한바퀴 회전
-  if(currentPosition < -65){
+  if(currentPosition < -155){
     stopMotor();  // 모터 정지
     state = true;
     return;      // 루프 종료
   }
   while(true) {
-    if(currentPosition < -65){
+    if(currentPosition < -155){
       stopMotor();  // 모터 정지
       return;      // 루프 종료
     }
