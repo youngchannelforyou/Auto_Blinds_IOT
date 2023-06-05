@@ -12,6 +12,9 @@ downBtn.disabled = true;
 var modeBtnisOn = true;
 var modeBtn = document.getElementById("modeBtn");
 
+var AIBtnisOn = false;
+var Aibtn = document.getElementById("AIBtn");
+
 autoBtn.addEventListener("click", function () {
     autoBtnisOn = !autoBtnisOn;
 
@@ -28,17 +31,33 @@ autoBtn.addEventListener("click", function () {
         upBtn.disabled = true;
         downBtn.disabled = true;
         modeBtn.disabled = false;
+        Aibtn.disabled = true;
         modeBtn.style.backgroundColor = "#4CAF50";
     } else { // 수동 모드일때 
         upBtn.style.backgroundColor = "#4CAF50";
         downBtn.style.backgroundColor = "#4CAF50";
         modeBtn.disabled = true;
+        Aibtn.disabled = false;
         modeBtn.style.backgroundColor = "gray";
         upBtn.disabled = false;
         downBtn.disabled = false;
     }
     sendData("/stoprun");
     sendData("/auto");
+});
+
+Aibtn.addEventListener("click", function () {
+    AIBtnisOn = !AIBtnisOn;
+
+    if (AIBtnisOn == true) {
+        Aibtn.disabled = true
+        downBtn.style.backgroundColor = "gray";
+        sendData("/ai")
+    } else {
+        Aibtn.disabled = false
+        Aibtn.style.backgroundColor = "#4CAF50";
+        sendData("/ai");
+    }
 });
 
 upBtn.addEventListener("click", function () {

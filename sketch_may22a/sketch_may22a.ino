@@ -3,7 +3,9 @@
 const int stepsPerRevolution = 64; 
 Stepper myStepper(stepsPerRevolution, 11,9,10,8); 
 const int lightSensorPin = A0;  
-
+const int TEMP_LM35 = A1;
+static unsigned long previousMillis = 0;
+const unsigned long interval = 60000;  // 10분에 해당하는 시간 (밀리초 단위)
 const int TRIG = 3;    // 초음파 송신 핀
 const int ECHO = 2;   // 초음파 수신 핀
 bool Auto = true;
@@ -22,6 +24,7 @@ void setup() {
 }
 
 void loop() {
+  
   if (Serial.available()) {
     char data = Serial.read();
     if (data == 'F') {
@@ -38,9 +41,11 @@ void loop() {
     }
   }
 
+  int lightLevel = analogRead(lightSensorPin);
+  Serial.print("LIGHT: ");
+  Serial.print(lightLevel);
   if (Auto == true){
-    int lightLevel = analogRead(lightSensorPin);
-
+  
     Serial.print("LIGHT: ");
     Serial.print(lightLevel);
     Serial.print("state: ");
@@ -66,20 +71,35 @@ void loop() {
         state = false;
       }
     }
-
-
-  
   }
+  
+  
+  float temp_lm35 = (5.0*analogRead(TEMP_LM35)*100)/1024;
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    Serial.print("L:");  // 값의 접두사를 추가하여 보냄
+    Serial.println(lightLevel);  // 값을 시리얼 통신으로 보냄
+    Serial.print("T:");  // 값의 접두사를 추가하여 보냄
+    Serial.println(temp_lm35);  // 값을 시리얼 통신으로 보냄
+    Serial.print("T:");  // 값의 접두사를 추가하여 보냄
+    Serial.println(temp_lm35);  // 값을 시리얼 통신으로 보냄
+    Serial.print("S:");  // 값의 접두사를 추가하여 보냄
+    Serial.println(state);  // 값을 시리얼 통신으로 보냄
+  }
+  
 }
 
 void UPclockwiseRotation() {
   long duration, distance;
   int count = 0;
+  int lightLevel = analogRead(lightSensorPin);
     // 시계 반대 방향으로 한바퀴 회전
   while(true) {  // 64 * 32 = 2048 한바퀴
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.println(" cm");
+    Serial.print("lightLevel: ");
+    Serial.print(lightLevel);
+    Serial.println(" dd");
     
     digitalWrite(TRIG, LOW);
     delayMicroseconds(2);
@@ -89,9 +109,9 @@ void UPclockwiseRotation() {
     
     duration = pulseIn (ECHO, HIGH); 
     distance = duration * 17 / 1000; 
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.println(" cm");
+    // Serial.print("Distance: ");
+    // Serial.print(distance);
+    // Serial.println(" cm");
 
     if (distance > 20){
       count = count + 1;
@@ -123,6 +143,9 @@ void UPclockwiseRotation() {
 
 // 시계 방향으로 모터 회전
 void DowncounterClockwiseRotation() {
+  int lightLevel = analogRead(lightSensorPin);
+  
+
   long duration, distance;
     // 시계 방향으로 한바퀴 회전
   if(currentPosition < -155){
@@ -131,6 +154,8 @@ void DowncounterClockwiseRotation() {
     return;      // 루프 종료
   }
   while(true) {
+    Serial.print("LIGHT: ");
+    Serial.print(lightLevel);
     if(currentPosition < -155){
       stopMotor();  // 모터 정지
       return;      // 루프 종료
