@@ -50,11 +50,23 @@ Aibtn.addEventListener("click", function () {
     AIBtnisOn = !AIBtnisOn;
 
     if (AIBtnisOn == true) {
-        Aibtn.disabled = true
+        upBtn.disabled = true
+        downBtn.disabled = true
+        modeBtn.disabled = true
+
+        upBtn.style.backgroundColor = "gray";
         downBtn.style.backgroundColor = "gray";
+        modeBtn.style.backgroundColor = "gray";
+        downBtn.style.backgroundColor = "red";
         sendData("/ai")
     } else {
-        Aibtn.disabled = false
+        upBtn.disabled = false
+        downBtn.disabled = false
+        modeBtn.disabled = false
+
+        upBtn.style.backgroundColor = "#4CAF50";
+        downBtn.style.backgroundColor = "#4CAF50";
+        modeBtn.style.backgroundColor = "#4CAF50";
         Aibtn.style.backgroundColor = "#4CAF50";
         sendData("/ai");
     }
