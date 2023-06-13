@@ -56,12 +56,11 @@ if __name__ == "__main__":
     # 예측하기
     time = 1  # 예측할 시간
     illumination = 100  # 조도
-    weather = "sun"  # 날씨
     temperature = 1  # 기온
 
     new_data = pd.DataFrame(
-        [[time, illumination, weather, temperature]],
-        columns=["time", "illumination", "weather", "temperature"],
+        [[time, illumination, temperature]],
+        columns=["time", "illumination", "temperature"],
     )
 
     prediction = my_model.predict(new_data)  # 커튼을 칠 확률
