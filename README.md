@@ -1,4 +1,5 @@
 # 아두이노 스마트 블라인드 IOT
+<img width="1659" alt="스크린샷 2024-09-10 오후 7 06 15" src="https://github.com/user-attachments/assets/af582cb0-1a3d-4e0a-a95e-c48bb8458d0b">
 
 ## 1. 데이터 디렉토리 구조 및 파일
 
